@@ -1,0 +1,366 @@
+/* ============================================================
+   データマネジメント入門講座 — Snow Village
+   v2: site-design.png 忠実版（毛筆: 花鳥風月）
+   ============================================================ */
+
+/* ---------- Font: 花鳥風月（毛筆見出し用） ---------- */
+@font-face {
+  font-family: "Kachoufuugetsu";
+  src: url("fonts/kachoufuugetsu.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* ---------- Design Tokens ---------- */
+:root {
+  --color-bg:        #F6EFE3;  /* Ivory（紙の地色） */
+  --color-text:      #2A2118;  /* Espresso */
+  --color-text-sub:  #6B5B49;  /* Cocoa */
+  --color-divider:   #C9B79C;  /* Sepia line */
+
+  --font-brush: "Kachoufuugetsu", "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", serif;
+  --font-body:  "Klee One", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  --font-meta:  "Cormorant Garamond", "Times New Roman", serif;
+
+  --content-max: 1344px;  /* Full HD 1920px の約 70% */
+}
+
+/* ---------- Reset / Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+a:focus-visible {
+  outline: 2px solid var(--color-text-sub);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+ul, ol { padding: 0; margin: 0; list-style: none; }
+
+h1, h2, h3 { margin: 0; line-height: 1.5; font-weight: 400; }
+
+p { margin: 0 0 1em; }
+p:last-child { margin-bottom: 0; }
+
+strong { font-weight: 600; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+.handwritten { mix-blend-mode: multiply; }
+
+.brush-heading {
+  font-family: var(--font-brush);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--color-text);
+}
+
+/* ---------- Hero（全幅で写真 1 枚） ---------- */
+.hero {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ---------- About（入門講座の説明） ---------- */
+.about {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: clamp(80px, 12vw, 140px) 24px 0;
+  text-align: center;
+}
+.about-heading {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  margin-bottom: 56px;
+}
+
+.about-frame {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px clamp(56px, 9vw, 96px);
+  /* isolation: isolate を外す。frame-bracket は z-index:-1 で root 文脈に逃がし、
+     body の Ivory 背景と multiply 合成させて白を透過させる */
+}
+.frame-bracket {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  z-index: -1;
+}
+.about-text {
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 1.0rem;
+  line-height: 2.0;
+  color: var(--color-text);
+}
+.about-text p { margin: 0 0 0.8em; }
+.about-text p:last-child { margin-bottom: 0; }
+
+/* ---------- Sessions ---------- */
+.sessions {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: clamp(96px, 14vw, 160px) 24px 0;
+}
+.session-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.session {
+  display: grid;
+  grid-template-columns: 440px 1fr;
+  gap: 44px;
+  padding: 56px 0;
+  border-top: 1px solid var(--color-divider);
+}
+.session:first-child { border-top: none; padding-top: 8px; }
+
+.session-thumb {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--color-divider);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.session-thumb img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.4s ease;
+}
+a.session-thumb:hover img { transform: scale(1.03); }
+a.session-thumb:hover { box-shadow: 0 8px 24px rgba(60, 40, 20, 0.18); }
+
+a.session-thumb[aria-disabled="true"] {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.session-thumb-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.5), transparent 70%),
+    linear-gradient(135deg, #EFE2C7 0%, #D9C7AB 100%);
+}
+.session-thumb-placeholder::before {
+  content: "Ep. " attr(data-episode);
+  font-family: var(--font-meta);
+  font-style: italic;
+  font-size: clamp(2.4rem, 5vw, 3.2rem);
+  color: var(--color-text-sub);
+  opacity: 0.7;
+  letter-spacing: 0.04em;
+}
+
+.session-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 4px 0;
+}
+.session-title {
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.session-speaker {
+  font-size: 0.9rem;
+  color: var(--color-text-sub);
+  margin: 0 0 14px;
+}
+.session-desc {
+  font-size: 0.98rem;
+  color: var(--color-text);
+  line-height: 1.95;
+  margin: 0 0 auto;
+}
+.session-desc.is-placeholder {
+  color: var(--color-text-sub);
+  font-style: italic;
+  opacity: 0.55;
+}
+
+.session-links {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: clamp(12px, 2.4vw, 24px);
+  margin-top: 24px;
+}
+.link-label {
+  display: inline-flex;
+  align-items: center;
+}
+.link-label img {
+  height: 64px;
+  width: auto;
+  mix-blend-mode: multiply;
+  transition: transform 0.2s ease;
+}
+.link-label:hover img { transform: rotate(-1.5deg) scale(1.04); }
+.link-label[aria-disabled="true"] {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.link-label[aria-disabled="true"] img {
+  opacity: 0.3;
+  filter: grayscale(0.6);
+}
+
+@media (max-width: 720px) {
+  .session {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 28px 0;
+  }
+  .session-thumb { aspect-ratio: 16 / 9; }
+  .session-links { gap: 14px; }
+  .link-label img { height: 48px; }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  margin-top: clamp(48px, 8vw, 80px);
+  padding: 32px 24px 64px;
+  text-align: center;
+}
+.site-footer p { margin: 0; }
+.footer-brand {
+  font-family: var(--font-brush);
+  font-weight: 400;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  color: var(--color-text);
+  letter-spacing: 0.1em;
+}
+
+/* ---------- Shared: info-card content (used by floating + bottom panels) ---------- */
+.info-eyebrow {
+  font-family: var(--font-brush);
+  font-weight: 400;
+  font-size: 1.15rem;
+  color: var(--color-text);
+  letter-spacing: 0.08em;
+  margin: 0 0 8px;
+}
+.info-card p { margin: 0 0 8px; line-height: 1.75; }
+.info-card p:last-child { margin-bottom: 0; }
+.info-card a {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: var(--color-text-sub);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.info-card a:hover { color: var(--color-text-sub); }
+.info-card code {
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--color-bg);
+  padding: 0.05em 0.4em;
+  border-radius: 3px;
+}
+.info-card strong { font-weight: 600; }
+
+/* ---------- Floating panel (PC のみ表示) ---------- */
+.floating-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 340px;
+  max-width: calc(100vw - 48px);
+  background: #FBF7EE;
+  border: 1px solid var(--color-divider);
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 12px 28px rgba(60, 40, 20, 0.18);
+  font-size: 0.82rem;
+  line-height: 1.75;
+  z-index: 100;
+}
+.floating-panel .info-eyebrow { font-size: 1.05rem; }
+.floating-panel .info-card + .info-card {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--color-divider);
+}
+
+@media (max-width: 720px) {
+  .floating-panel { display: none; }
+}
+
+/* ---------- Bottom info（最下部・常時表示） ---------- */
+.bottom-info {
+  max-width: var(--content-max);
+  margin: clamp(96px, 14vw, 160px) auto 0;
+  padding: 0 24px;
+}
+.bottom-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 64px);
+}
+.bottom-info .info-card {
+  font-size: 0.95rem;
+}
+@media (max-width: 720px) {
+  .bottom-info-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .bottom-info .info-card + .info-card {
+    padding-top: 28px;
+    border-top: 1px dashed var(--color-divider);
+  }
+}
+
+/* ---------- Motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- About frame: モバイルでは枠を隠す ---------- */
+@media (max-width: 560px) {
+  .about-frame { padding: 16px 8px; }
+  .frame-bracket { display: none; }
+}
