@@ -179,6 +179,44 @@ a.session-thumb[aria-disabled="true"] {
     radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.5), transparent 70%),
     linear-gradient(135deg, #EFE2C7 0%, #D9C7AB 100%);
 }
+
+/* Thumb overlay: dark gradient + white text on top of image */
+.session-thumb-overlay { position: relative; }
+.session-thumb-overlay img { width: 100%; height: 100%; object-fit: cover; }
+.session-thumb-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 14, 8, 0.35) 0%, rgba(20, 14, 8, 0.72) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.thumb-overlay-text {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #FFFFFF;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+  padding: 20px;
+  line-height: 1.65;
+}
+.session-thumb-overlay--cta .thumb-overlay-text {
+  font-family: var(--font-brush);
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  letter-spacing: 0.08em;
+}
+.session-thumb-overlay--coming .thumb-overlay-text {
+  font-family: var(--font-meta);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
+  letter-spacing: 0.18em;
+}
 .session-thumb-placeholder::before {
   content: "Ep. " attr(data-episode);
   font-family: var(--font-meta);
