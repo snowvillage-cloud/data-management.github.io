@@ -1,0 +1,5 @@
+# Local agent / editor working state
+.claude/
+
+# Design notes & source materials (not for publication)
+idea/
